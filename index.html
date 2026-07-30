@@ -8,13 +8,28 @@
 	<meta name="author" content="Lucian Marin">
 	<meta property="og:image" content="/static/any.png">
 	<meta name="twitter:image" content="/static/any.png">
-	<title>Calculator</title>
+	<title>Subcalc</title>
 	<link rel="apple-touch-icon" type="image/png" href="/static/any.png">
 	<link rel="icon" sizes="192x192" type="image/png" href="/static/any.png">
 	<link rel="manifest" type="application/json" href="/static/manifest.json">
+	<link rel="stylesheet" type="text/css" href="/static/style.css">
+	<script type="text/javascript" src="/static/math.js"></script>
+	<script type="text/javascript" src="/static/script.js"></script>
 </head>
-<body>
-	<div id="root"></div>
-	<script type="module" src="/src/main.jsx"></script>
+<body onload="load()">
+	<div class="help">
+		<a target="_blank" href="https://mathjs.org/docs/expressions/syntax.html">?</a>
+	</div>
+	<div class="container">
+		<div class="left">
+			<form spellcheck="false">
+				<textarea id="content" rows=1 cols=80 autofocus
+				oninput="calc(this)" placeholder="Solve for x"></textarea>
+			</form>
+		</div>
+		<div class="right">
+			<div id="response"></div>
+		</div>
+	</div>
 </body>
 </html>
