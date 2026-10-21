@@ -1,14 +1,15 @@
-# Calc
+# Mathematical
 
-Calc is a minimalist, reactive notepad calculator. It allows users to type mathematical expressions and variables on the left side of the screen and see the evaluated results in real-time on the right side. It combines the freedom of a text editor with the power of a scientific calculator.
+Mathematical is a minimalist, reactive notepad calculator. It allows users to type mathematical expressions and variables on the left side of the screen and see the evaluated results in real-time on the right side. It combines the freedom of a text editor with the power of a scientific calculator.
 
 ## Features
 
-- **Real-time Evaluation:** Calculations are performed instantly as you type.
-- **Variable Support:** Define variables (e.g., `x = 10`, `x * 5`) and use them in subsequent lines.
-- **Persistence:** Your calculations are automatically saved to the browser's local storage, so you pick up right where you left off.
-- **Math.js Integration:** Powered by [mathjs](https://mathjs.org/), supporting a wide range of mathematical functions and expressions.
-- **Clean UI:** A simple split-pane interface designed for focus.
+- **Real-time Evaluation:** Calculations are performed instantly as you type, with automatic floating-point precision formatting.
+- **Variable & Function Scope:** Define variables (`x = 10`), functions (`f(x) = x^2`), and reference the previous line's result (`ans * 2`), with clickable scope pills in the status bar.
+- **Interactive Results & Aggregations:** Click any evaluated result (or the live **Sum** and **Avg** badges in the status bar) to copy it to your clipboard, or copy the entire sheet at once.
+- **Synchronized Split-Pane Editor:** Line numbers, active-line highlighting across expressions and results, comment support (`#` and `//`), and automatic light/dark mode based on system preference.
+- **Built-in Syntax Guide:** Interactive syntax reference drawer powered by [mathjs](https://mathjs.org/).
+- **Persistence:** Your calculations are automatically saved to the browser's `localStorage`.
 
 ## Technologies Used
 
