@@ -39,6 +39,10 @@
 	--text-result: #141413;
 	--text-error: #d9381e;
 	--bg-error-dot: #f04e23;
+
+	--tok-variable: #0d7a5f;
+	--tok-constant: #8244cc;
+	--tok-string: #b4620a;
 }
 
 @media (prefers-color-scheme: dark) {
@@ -77,6 +81,10 @@
 		--text-result: #ffffff;
 		--text-error: #ff6b52;
 		--bg-error-dot: #ff6b52;
+
+		--tok-variable: #3dd6ad;
+		--tok-constant: #b884ff;
+		--tok-string: #f0a44c;
 	}
 }
 
@@ -400,6 +408,65 @@ button {
 	background-color: var(--bg-row-active);
 }
 
+.syntax-overlay {
+	inset: 0;
+	overflow: hidden;
+	pointer-events: none;
+	position: absolute;
+}
+
+.syntax-layer {
+	color: var(--text-primary);
+	font-family: var(--font-mono);
+	font-size: var(--regular);
+	line-height: var(--line-height);
+	padding: 0 16px 0 12px;
+	white-space: pre;
+	will-change: transform;
+}
+
+.syntax-line {
+	height: var(--line-height);
+	line-height: var(--line-height);
+}
+
+.tok-comment {
+	color: var(--text-muted);
+}
+
+.tok-number {
+	color: var(--text-primary);
+}
+
+.tok-operator {
+	color: var(--accent);
+}
+
+.tok-function {
+	color: var(--cobalt);
+}
+
+.tok-variable {
+	color: var(--tok-variable);
+}
+
+.tok-constant {
+	color: var(--tok-constant);
+}
+
+.tok-keyword,
+.tok-unit {
+	color: var(--olive);
+}
+
+.tok-string {
+	color: var(--tok-string);
+}
+
+.tok-punctuation {
+	color: var(--text-secondary);
+}
+
 .editor-surface form {
 	display: flex;
 	flex: 1 0 auto;
@@ -411,7 +478,8 @@ textarea {
 	background: transparent;
 	border: 0 none;
 	caret-color: var(--accent);
-	color: var(--text-primary);
+	color: transparent;
+	-webkit-text-fill-color: transparent;
 	display: block;
 	flex: 1 0 auto;
 	font-family: var(--font-mono);
@@ -425,8 +493,15 @@ textarea {
 	width: 100%;
 }
 
+textarea::selection {
+	background-color: var(--accent-soft);
+	color: transparent;
+	-webkit-text-fill-color: transparent;
+}
+
 textarea::placeholder {
 	color: var(--text-muted);
+	-webkit-text-fill-color: var(--text-muted);
 }
 
 textarea:focus {

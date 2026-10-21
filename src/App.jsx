@@ -54,6 +54,102 @@ function preprocessLine(rawLine) {
   return { kind: 'expression', expr: cleaned }
 }
 
+const KEYWORDS = new Set(['in', 'to', 'mod', 'and', 'or', 'xor', 'not'])
+const CONSTANTS = new Set([
+  'pi',
+  'PI',
+  'e',
+  'E',
+  'tau',
+  'phi',
+  'i',
+  'Infinity',
+  'NaN',
+  'true',
+  'false',
+  'ans',
+])
+
+const TOKEN_REGEX =
+  /("(?:\\.|[^"\\])*"|'(?:\\.|[^'\\])*')|(\b(?:0[xX][0-9a-fA-F]+|0[bB][01]+|0[oO][0-7]+|\d+(?:\.\d*)?(?:[eE][+-]?\d+)?|\.\d+(?:[eE][+-]?\d+)?)\b)|([a-zA-Z_$][a-zA-Z0-9_$]*)|(==|!=|<=|>=|<<|>>|\.\*|\.\^|\.\/|[+\-*/^%=<>!&|~?:])|([()[\]{}.,;])|(\s+)/g
+
+function tokenizeLine(rawLine, scopeNames) {
+  if (!rawLine) return []
+  const trimmedStart = rawLine.trimStart()
+  if (trimmedStart.startsWith('#') || trimmedStart.startsWith('//')) {
+    return [{ type: 'comment', text: rawLine }]
+  }
+
+  // Find trailing // comment outside of quotes
+  let commentIndex = -1
+  let inQuote = null
+  for (let i = 0; i < rawLine.length; i += 1) {
+    const ch = rawLine[i]
+    if (inQuote) {
+      if (ch === '\\') i += 1
+      else if (ch === inQuote) inQuote = null
+    } else if (ch === '"' || ch === "'") {
+      inQuote = ch
+    } else if (ch === '/' && rawLine[i + 1] === '/') {
+      commentIndex = i
+      break
+    }
+  }
+
+  const codePart = commentIndex >= 0 ? rawLine.slice(0, commentIndex) : rawLine
+  const commentPart = commentIndex >= 0 ? rawLine.slice(commentIndex) : ''
+
+  const tokens = []
+  let lastIndex = 0
+  TOKEN_REGEX.lastIndex = 0
+  let match
+
+  while ((match = TOKEN_REGEX.exec(codePart)) !== null) {
+    if (match.index > lastIndex) {
+      tokens.push({ type: 'plain', text: codePart.slice(lastIndex, match.index) })
+    }
+    const [full, strTok, numTok, idTok, opTok, puncTok, wsTok] = match
+    if (wsTok) {
+      tokens.push({ type: 'plain', text: full })
+    } else if (strTok) {
+      tokens.push({ type: 'string', text: full })
+    } else if (numTok) {
+      tokens.push({ type: 'number', text: full })
+    } else if (idTok) {
+      const afterSlice = codePart.slice(TOKEN_REGEX.lastIndex)
+      if (/^\s*\(/.test(afterSlice)) {
+        tokens.push({ type: 'function', text: full })
+      } else if (/^\s*=(?!=)/.test(afterSlice)) {
+        tokens.push({ type: 'variable', text: full })
+      } else if (KEYWORDS.has(full)) {
+        tokens.push({ type: 'keyword', text: full })
+      } else if (CONSTANTS.has(full)) {
+        tokens.push({ type: 'constant', text: full })
+      } else if (scopeNames.has(full)) {
+        tokens.push({ type: 'variable', text: full })
+      } else {
+        tokens.push({ type: 'unit', text: full })
+      }
+    } else if (opTok) {
+      tokens.push({ type: 'operator', text: full })
+    } else if (puncTok) {
+      tokens.push({ type: 'punctuation', text: full })
+    } else {
+      tokens.push({ type: 'plain', text: full })
+    }
+    lastIndex = TOKEN_REGEX.lastIndex
+  }
+
+  if (lastIndex < codePart.length) {
+    tokens.push({ type: 'plain', text: codePart.slice(lastIndex) })
+  }
+  if (commentPart) {
+    tokens.push({ type: 'comment', text: commentPart })
+  }
+
+  return tokens
+}
+
 function App() {
   const [content, setContent] = useState(() => localStorage.getItem('content') || '')
   const [previousContent, setPreviousContent] = useState(null)
@@ -69,6 +165,7 @@ function App() {
 
   const textareaRef = useRef(null)
   const containerRef = useRef(null)
+  const syntaxLayerRef = useRef(null)
   const copyTimeoutRef = useRef(null)
 
   const syntaxCatalog = useMemo(() => getSyntaxCatalog(), [])
@@ -248,6 +345,16 @@ function App() {
 
   const lines = content.split(/\r?\n/)
   const highlightedLine = hoveredLine !== null ? hoveredLine : activeLine
+
+  const scopeNameSet = useMemo(
+    () => new Set(scopeItems.map((item) => item.name)),
+    [scopeItems]
+  )
+
+  const tokenizedLines = useMemo(
+    () => lines.map((line) => tokenizeLine(line, scopeNameSet)),
+    [lines, scopeNameSet]
+  )
 
   // Persist content
   useEffect(() => {
@@ -596,6 +703,26 @@ function App() {
                     })}
                   </div>
 
+                  <div className="syntax-overlay" aria-hidden="true">
+                    <div className="syntax-layer" ref={syntaxLayerRef}>
+                      {tokenizedLines.map((tokens, lineIdx) => (
+                        <div key={lineIdx} className="syntax-line">
+                          {tokens.length === 0
+                            ? '\u00A0'
+                            : tokens.map((tok, tokIdx) =>
+                                tok.type === 'plain' ? (
+                                  tok.text
+                                ) : (
+                                  <span key={tokIdx} className={`tok-${tok.type}`}>
+                                    {tok.text}
+                                  </span>
+                                )
+                              )}
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+
                   <form spellCheck="false" onSubmit={(e) => e.preventDefault()}>
                     <textarea
                       id="input"
@@ -608,6 +735,9 @@ function App() {
                       onChange={handleInput}
                       onScroll={(e) => {
                         if (e.target.scrollTop !== 0) e.target.scrollTop = 0
+                        if (syntaxLayerRef.current) {
+                          syntaxLayerRef.current.style.transform = `translate3d(-${e.target.scrollLeft}px, 0, 0)`
+                        }
                       }}
                       onClick={(e) => updateActiveLine(e.target)}
                       onKeyUp={(e) => updateActiveLine(e.target)}
