@@ -63,7 +63,7 @@ function App() {
   const [copiedSummary, setCopiedSummary] = useState(null)
   const [showHelp, setShowHelp] = useState(false)
   const [helpSearch, setHelpSearch] = useState('')
-  const [selectedCategory, setSelectedCategory] = useState('All')
+  const [selectedCategory, setSelectedCategory] = useState('Basic')
 
   const textareaRef = useRef(null)
   const copyTimeoutRef = useRef(null)
@@ -73,7 +73,7 @@ function App() {
   const filteredCatalog = useMemo(() => {
     const query = helpSearch.trim().toLowerCase()
     return syntaxCatalog
-      .filter((group) => selectedCategory === 'All' || group.category === selectedCategory)
+      .filter((group) => Boolean(query) || group.category === selectedCategory)
       .map((group) => {
         if (!query) return group
         const matchedItems = group.items.filter(
@@ -82,6 +82,7 @@ function App() {
             item.syntax.toLowerCase().includes(query) ||
             item.expr.toLowerCase().includes(query) ||
             item.desc.toLowerCase().includes(query) ||
+            (item.subcategory && item.subcategory.toLowerCase().includes(query)) ||
             group.category.toLowerCase().includes(query)
         )
         return { ...group, items: matchedItems }
@@ -358,7 +359,12 @@ function App() {
             <button
               type="button"
               className="help-trigger"
-              onClick={() => setShowHelp((prev) => !prev)}
+              onClick={() =>
+                setShowHelp((prev) => {
+                  if (!prev) setSelectedCategory('Basic')
+                  return !prev
+                })
+              }
               aria-label="Syntax reference"
               title="Syntax guide & examples"
             >
@@ -557,19 +563,15 @@ function App() {
               </div>
 
               <div className="help-categories" role="tablist" aria-label="Reference categories">
-                <button
-                  type="button"
-                  className={`help-cat-pill ${selectedCategory === 'All' ? 'is-active' : ''}`}
-                  onClick={() => setSelectedCategory('All')}
-                >
-                  All ({totalCatalogCount})
-                </button>
                 {syntaxCatalog.map((group) => (
                   <button
                     key={group.category}
                     type="button"
                     className={`help-cat-pill ${selectedCategory === group.category ? 'is-active' : ''}`}
-                    onClick={() => setSelectedCategory(group.category)}
+                    onClick={() => {
+                      setSelectedCategory(group.category)
+                      setHelpSearch('')
+                    }}
                   >
                     {group.category} ({group.items.length})
                   </button>
