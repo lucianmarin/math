@@ -86,12 +86,16 @@
 	padding: 0;
 }
 
+html,
 body {
 	background-color: var(--bg-app);
 	color: var(--text-primary);
 	font-family: var(--font-mono);
 	font-size: var(--regular);
+	height: 100%;
 	line-height: 1.4;
+	overflow: hidden;
+	overscroll-behavior: none;
 	-webkit-font-smoothing: antialiased;
 	-moz-osx-font-smoothing: grayscale;
 }
@@ -241,6 +245,7 @@ button {
 	flex: 1;
 	gap: 12px;
 	grid-template-columns: minmax(0, 1fr) 318px;
+	grid-template-rows: minmax(0, 1fr);
 	min-height: 0;
 }
 
@@ -302,27 +307,39 @@ button {
 
 /* Split Workspace */
 .container {
+	background: linear-gradient(
+		to right,
+		var(--bg-editor) 0%,
+		var(--bg-editor) 62%,
+		var(--bg-results) 62%,
+		var(--bg-results) 100%
+	);
 	display: grid;
 	flex: 1;
 	grid-template-columns: minmax(0, 62%) minmax(0, 38%);
+	min-height: 0;
 	overflow-y: auto;
+	overscroll-behavior: contain;
 	position: relative;
 }
 
 .left {
 	background-color: var(--bg-editor);
+	display: flex;
+	flex-direction: column;
 	min-height: 100%;
-	padding: 10px 0 40px;
+	padding: 10px 0 28px;
 }
 
 .right {
 	background-color: var(--bg-results);
 	min-height: 100%;
-	padding: 10px 0 40px;
+	padding: 10px 0 28px;
 }
 
 .editor-wrapper {
 	display: flex;
+	flex: 1;
 	min-height: 100%;
 	position: relative;
 }
@@ -351,7 +368,9 @@ button {
 }
 
 .editor-surface {
+	display: flex;
 	flex: 1;
+	flex-direction: column;
 	min-width: 0;
 	position: relative;
 }
@@ -380,6 +399,9 @@ button {
 }
 
 .editor-surface form {
+	display: flex;
+	flex: 1;
+	flex-direction: column;
 	min-height: 100%;
 	position: relative;
 }
@@ -390,10 +412,11 @@ textarea {
 	caret-color: var(--accent);
 	color: var(--text-primary);
 	display: block;
+	flex: 1;
 	font-family: var(--font-mono);
 	font-size: var(--regular);
 	line-height: var(--line-height);
-	min-height: calc(100dvh - 150px);
+	min-height: 100%;
 	overflow-x: auto;
 	overflow-y: hidden;
 	padding: 0 16px 0 12px;
@@ -1543,6 +1566,16 @@ textarea:focus {
 	.pane-headers,
 	.container {
 		grid-template-columns: 55% 45%;
+	}
+
+	.container {
+		background: linear-gradient(
+			to right,
+			var(--bg-editor) 0%,
+			var(--bg-editor) 55%,
+			var(--bg-results) 55%,
+			var(--bg-results) 100%
+		);
 	}
 
 	.pane-header-hint {

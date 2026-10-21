@@ -247,8 +247,12 @@ function App() {
   useEffect(() => {
     localStorage.setItem('content', content)
     if (textareaRef.current) {
-      textareaRef.current.style.height = 'auto'
-      textareaRef.current.style.height = `${textareaRef.current.scrollHeight}px`
+      const el = textareaRef.current
+      el.style.minHeight = '0px'
+      el.style.height = '0px'
+      const nextHeight = el.scrollHeight
+      el.style.minHeight = '100%'
+      el.style.height = `${nextHeight}px`
     }
   }, [content])
 
