@@ -64,8 +64,11 @@ function App() {
   const [showHelp, setShowHelp] = useState(false)
   const [helpSearch, setHelpSearch] = useState('')
   const [selectedCategory, setSelectedCategory] = useState('Basic')
+  const [metricsCollapsed, setMetricsCollapsed] = useState(false)
+  const [scopeCollapsed, setScopeCollapsed] = useState(false)
 
   const textareaRef = useRef(null)
+  const containerRef = useRef(null)
   const copyTimeoutRef = useRef(null)
 
   const syntaxCatalog = useMemo(() => getSyntaxCatalog(), [])
@@ -243,18 +246,38 @@ function App() {
     }
   }, [content])
 
-  // Persist content & auto-size textarea
+  const lines = content.split(/\r?\n/)
+  const highlightedLine = hoveredLine !== null ? hoveredLine : activeLine
+
+  // Persist content
   useEffect(() => {
     localStorage.setItem('content', content)
-    if (textareaRef.current) {
-      const el = textareaRef.current
-      el.style.minHeight = '0px'
-      el.style.height = '0px'
-      const nextHeight = el.scrollHeight
-      el.style.minHeight = '100%'
-      el.style.height = `${nextHeight}px`
+    if (textareaRef.current && textareaRef.current.scrollTop !== 0) {
+      textareaRef.current.scrollTop = 0
     }
   }, [content])
+
+  // Keep active line within the scrolling area when navigating or adding lines
+  useEffect(() => {
+    const container = containerRef.current
+    if (!container) return
+    if (textareaRef.current && textareaRef.current.scrollTop !== 0) {
+      textareaRef.current.scrollTop = 0
+    }
+    const lineHeight = 32
+    const padTop = 10
+    const padBottom = 28
+    const lineTop = padTop + activeLine * lineHeight
+    const lineBottom = lineTop + lineHeight
+    const viewTop = container.scrollTop
+    const viewBottom = viewTop + container.clientHeight
+
+    if (lineTop - padTop < viewTop) {
+      container.scrollTop = Math.max(0, lineTop - padTop)
+    } else if (lineBottom + padBottom > viewBottom) {
+      container.scrollTop = lineBottom + padBottom - container.clientHeight
+    }
+  }, [activeLine, lines.length])
 
   // Close help modal on Escape
   useEffect(() => {
@@ -370,9 +393,6 @@ function App() {
     textarea.setSelectionRange(lineEnd, lineEnd)
   }
 
-  const lines = content.split(/\r?\n/)
-  const highlightedLine = hoveredLine !== null ? hoveredLine : activeLine
-
   // Visual telemetry calculations for the desktop Information Sidebar
   const totalLines = lines.length
   const evalRatio = totalLines > 0 ? stats.expressionLines / totalLines : 0
@@ -471,7 +491,8 @@ function App() {
           </div>
           <div className="brand-text">
             <span className="brand-title">Mathematical</span>
-            <span className="brand-status-pill">LIVE SHEET</span>
+            <span className="brand-divider" aria-hidden="true">—</span>
+            <span className="brand-count">{stats.expressionLines}</span>
           </div>
         </div>
 
@@ -547,7 +568,7 @@ function App() {
             </div>
           </div>
 
-          <main className="container">
+          <main className="container" ref={containerRef}>
             <div className="left">
               <div className="editor-wrapper">
                 <div className="line-numbers" aria-hidden="true">
@@ -579,11 +600,15 @@ function App() {
                     <textarea
                       id="input"
                       ref={textareaRef}
-                      rows={1}
+                      rows={lines.length}
                       cols={80}
                       autoFocus
                       value={content}
+                      style={{ height: `${lines.length * 32}px` }}
                       onChange={handleInput}
+                      onScroll={(e) => {
+                        if (e.target.scrollTop !== 0) e.target.scrollTop = 0
+                      }}
                       onClick={(e) => updateActiveLine(e.target)}
                       onKeyUp={(e) => updateActiveLine(e.target)}
                       onSelect={(e) => updateActiveLine(e.target)}
@@ -640,13 +665,23 @@ function App() {
           {/* Card 1: Aggregations (Sum & Avg) + Concentric Rings & Dot Range Strip */}
           <div className="bento-card bento-metrics">
             <div className="bento-top-row">
-              <span className="black-tag">METRICS</span>
+              <button
+                type="button"
+                className="black-tag"
+                onClick={() => setMetricsCollapsed((prev) => !prev)}
+                aria-expanded={!metricsCollapsed}
+                title={metricsCollapsed ? 'Expand Metrics' : 'Collapse Metrics'}
+              >
+                METRICS
+              </button>
               <span className="bento-subtle">
                 {stats.numericCount} numeric {stats.numericCount === 1 ? 'val' : 'vals'}
               </span>
             </div>
 
-            <div className="metrics-split">
+            {!metricsCollapsed && (
+              <>
+                <div className="metrics-split">
               <div className="orange-hero-card">
                 <button
                   type="button"
@@ -860,6 +895,8 @@ function App() {
                 </div>
               </div>
             </div>
+              </>
+            )}
           </div>
 
           {/* Card 2: Lines & Sheet Dot-Matrix (calendar.jpg + statistics.jpeg) */}
@@ -930,55 +967,65 @@ function App() {
 
             <div className="calendar-motto">
               <span>{stats.expressionLines} EVALUATED</span>
-              <span>LESS BUT BETTER</span>
+              <span>{totalLines - stats.expressionLines} UNEVALUATED</span>
             </div>
           </div>
 
           {/* Card 3: Scope Variables & Functions (dark.jpeg + banking.jpeg) */}
           <div className="bento-card bento-scope">
             <div className="bento-top-row">
-              <span className="black-tag">SCOPE</span>
+              <button
+                type="button"
+                className="black-tag"
+                onClick={() => setScopeCollapsed((prev) => !prev)}
+                aria-expanded={!scopeCollapsed}
+                title={scopeCollapsed ? 'Expand Scope' : 'Collapse Scope'}
+              >
+                SCOPE
+              </button>
               <span className="bento-subtle">
                 {scopeItems.length} {scopeItems.length === 1 ? 'symbol' : 'symbols'}
               </span>
             </div>
 
-            {scopeItems.length === 0 ? (
-              <div className="scope-empty-box">
-                <div className="scope-empty-dots" aria-hidden="true">
-                  <span /><span /><span /><span />
+            {!scopeCollapsed && (
+              scopeItems.length === 0 ? (
+                <div className="scope-empty-box">
+                  <div className="scope-empty-dots" aria-hidden="true">
+                    <span /><span /><span /><span />
+                  </div>
+                  <p>No variables defined — try <code>x = 25</code></p>
                 </div>
-                <p>No variables defined — try <code>x = 25</code></p>
-              </div>
-            ) : (
-              <div className="scope-visual-list">
-                {scopeItems.map((item) => (
-                  <button
-                    key={item.name}
-                    type="button"
-                    className={`scope-bar-card ${item.isFunction ? 'is-fn' : ''}`}
-                    onClick={() =>
-                      insertSnippet(item.isFunction ? `${item.name}()` : item.name)
-                    }
-                    title={`Click to insert ${item.name}`}
-                  >
-                    <div
-                      className="scope-bar-fill"
-                      style={{ width: `${Math.round(item.fillRatio * 100)}%` }}
-                      aria-hidden="true"
-                    />
-                    <div className="scope-bar-content">
-                      <span className="scope-Left">
-                        <span className="scope-badge">
-                          {item.isFunction ? 'fn' : 'var'}
+              ) : (
+                <div className="scope-visual-list">
+                  {scopeItems.map((item) => (
+                    <button
+                      key={item.name}
+                      type="button"
+                      className={`scope-bar-card ${item.isFunction ? 'is-fn' : ''}`}
+                      onClick={() =>
+                        insertSnippet(item.isFunction ? `${item.name}()` : item.name)
+                      }
+                      title={`Click to insert ${item.name}`}
+                    >
+                      <div
+                        className="scope-bar-fill"
+                        style={{ width: `${Math.round(item.fillRatio * 100)}%` }}
+                        aria-hidden="true"
+                      />
+                      <div className="scope-bar-content">
+                        <span className="scope-Left">
+                          <span className="scope-badge">
+                            {item.isFunction ? 'fn' : 'var'}
+                          </span>
+                          <span className="scope-name">{item.name}</span>
                         </span>
-                        <span className="scope-name">{item.name}</span>
-                      </span>
-                      <span className="scope-val">{item.valueText}</span>
-                    </div>
-                  </button>
-                ))}
-              </div>
+                        <span className="scope-val">{item.valueText}</span>
+                      </div>
+                    </button>
+                  ))}
+                </div>
+              )
             )}
           </div>
         </aside>
@@ -987,7 +1034,6 @@ function App() {
       {/* Mobile-only Status Bar */}
       <footer className="status-bar">
         <div className="status-vars">
-          <span className="status-label">Scope:</span>
           {scopeItems.length === 0 ? (
             <span className="status-empty">No variables defined</span>
           ) : (
@@ -1034,9 +1080,6 @@ function App() {
               </span>
             </button>
           )}
-          <span className="status-count">
-            {lines.length} {lines.length === 1 ? 'line' : 'lines'}
-          </span>
         </div>
       </footer>
 

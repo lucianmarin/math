@@ -161,7 +161,7 @@ button {
 .brand-text {
 	align-items: center;
 	display: flex;
-	gap: 10px;
+	gap: 6px;
 }
 
 .brand-title {
@@ -171,15 +171,18 @@ button {
 	letter-spacing: -0.02em;
 }
 
-.brand-status-pill {
-	background-color: var(--bg-dark-card);
-	border-radius: 999px;
-	color: #ffffff;
+.brand-divider {
+	color: var(--text-muted);
 	font-family: var(--font-sans);
-	font-size: 9.5px;
+	font-size: 16px;
+}
+
+.brand-count {
+	color: var(--accent);
+	font-family: var(--font-sans);
+	font-size: 16px;
 	font-weight: 700;
-	letter-spacing: 0.08em;
-	padding: 3px 8px;
+	letter-spacing: -0.02em;
 }
 
 .toolbar {
@@ -307,6 +310,7 @@ button {
 
 /* Split Workspace */
 .container {
+	align-items: stretch;
 	background: linear-gradient(
 		to right,
 		var(--bg-editor) 0%,
@@ -317,6 +321,7 @@ button {
 	display: grid;
 	flex: 1;
 	grid-template-columns: minmax(0, 62%) minmax(0, 38%);
+	grid-template-rows: minmax(100%, max-content);
 	min-height: 0;
 	overflow-y: auto;
 	overscroll-behavior: contain;
@@ -327,20 +332,17 @@ button {
 	background-color: var(--bg-editor);
 	display: flex;
 	flex-direction: column;
-	min-height: 100%;
 	padding: 10px 0 28px;
 }
 
 .right {
 	background-color: var(--bg-results);
-	min-height: 100%;
 	padding: 10px 0 28px;
 }
 
 .editor-wrapper {
 	display: flex;
-	flex: 1;
-	min-height: 100%;
+	flex: 1 0 auto;
 	position: relative;
 }
 
@@ -400,9 +402,8 @@ button {
 
 .editor-surface form {
 	display: flex;
-	flex: 1;
+	flex: 1 0 auto;
 	flex-direction: column;
-	min-height: 100%;
 	position: relative;
 }
 
@@ -412,11 +413,10 @@ textarea {
 	caret-color: var(--accent);
 	color: var(--text-primary);
 	display: block;
-	flex: 1;
+	flex: 1 0 auto;
 	font-family: var(--font-mono);
 	font-size: var(--regular);
 	line-height: var(--line-height);
-	min-height: 100%;
 	overflow-x: auto;
 	overflow-y: hidden;
 	padding: 0 16px 0 12px;
@@ -570,14 +570,21 @@ textarea:focus {
 
 .black-tag {
 	background-color: var(--bg-dark-card);
+	border: none;
 	border-radius: 999px;
 	color: #ffffff;
+	cursor: pointer;
 	font-size: 10px;
 	font-weight: 700;
 	letter-spacing: 0.08em;
 	line-height: 1;
 	padding: 5px 10px;
 	text-transform: uppercase;
+	transition: opacity 0.15s ease;
+}
+
+.black-tag:hover {
+	opacity: 0.85;
 }
 
 .bento-subtle {
@@ -1173,15 +1180,6 @@ textarea:focus {
 	overflow-x: auto;
 }
 
-.status-label {
-	color: var(--text-muted);
-	flex-shrink: 0;
-	font-size: 11px;
-	font-weight: 700;
-	letter-spacing: 0.04em;
-	text-transform: uppercase;
-}
-
 .status-empty {
 	color: var(--text-muted);
 	font-size: 11.5px;
@@ -1254,12 +1252,6 @@ textarea:focus {
 	font-family: var(--font-mono);
 	font-size: 11.5px;
 	font-weight: 700;
-}
-
-.status-count {
-	color: var(--text-muted);
-	font-size: 11.5px;
-	font-weight: 600;
 }
 
 /* ============================================================
@@ -1549,10 +1541,6 @@ textarea:focus {
 	.app-shell {
 		gap: 8px;
 		padding: 8px;
-	}
-
-	.brand-status-pill {
-		display: none;
 	}
 
 	.toolbar-btn span {
