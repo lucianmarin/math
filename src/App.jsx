@@ -455,16 +455,13 @@ function App() {
         <div className="brand">
           <div className="brand-icon" aria-hidden="true">
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
-              <circle
-                cx="12"
-                cy="12"
-                r="8.5"
+              <path
+                d="M 20.28 10.09 A 8.5 8.5 0 1 1 13.91 3.72"
                 stroke="currentColor"
                 strokeWidth="2.5"
-                strokeDasharray="36 18"
                 strokeLinecap="round"
               />
-              <circle cx="17.5" cy="6.5" r="2.6" fill="var(--accent)" />
+              <circle cx="18.01" cy="5.99" r="2.5" fill="var(--accent)" />
               <circle cx="12" cy="12" r="2.2" fill="currentColor" />
             </svg>
           </div>
@@ -617,16 +614,16 @@ function App() {
                             : undefined
                       }
                     >
-                      {item.type === 'function' && <span className="result-badge">fn</span>}
-                      {item.type === 'error' && <span className="result-error-dot" aria-hidden="true" />}
-                      <span className="result-value">
-                        {result === undefined || result === null ? '\u00A0' : String(result)}
-                      </span>
                       {isCopyable && (
                         <span className={`copy-pill ${isCopied ? 'is-visible' : ''}`}>
                           {isCopied ? 'Copied' : 'Copy'}
                         </span>
                       )}
+                      {item.type === 'function' && <span className="result-badge">fn</span>}
+                      {item.type === 'error' && <span className="result-error-dot" aria-hidden="true" />}
+                      <span className="result-value">
+                        {result === undefined || result === null ? '\u00A0' : String(result)}
+                      </span>
                     </p>
                   )
                 })}
