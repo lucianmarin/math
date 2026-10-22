@@ -274,6 +274,15 @@ button {
 	color: var(--accent);
 }
 
+.toolbar-btn.is-active {
+	background-color: var(--accent);
+	color: #ffffff;
+}
+
+.toolbar-btn.is-active:hover:not(:disabled) {
+	background-color: var(--accent-hover);
+}
+
 .help-trigger {
 	align-items: center;
 	background-color: var(--accent);
@@ -310,9 +319,14 @@ button {
 	display: grid;
 	flex: 1;
 	gap: 12px;
-	grid-template-columns: minmax(0, 1fr) 318px;
+	grid-template-columns: minmax(0, 1fr);
 	grid-template-rows: minmax(0, 1fr);
 	min-height: 0;
+	position: relative;
+}
+
+.workspace-grid.has-sidebar {
+	grid-template-columns: minmax(0, 1fr) 33.333%;
 }
 
 .sheet-card {
@@ -1286,13 +1300,13 @@ textarea:focus {
 }
 
 /* ============================================================
-   Mobile-Only Bottom Status Bar (Hidden on Large Displays)
+   Bottom Status Bar
    ============================================================ */
 .status-bar {
 	align-items: center;
 	background-color: var(--bg-surface);
 	border-radius: var(--radius-panel);
-	display: none;
+	display: flex;
 	flex-shrink: 0;
 	font-family: var(--font-sans);
 	font-size: 12px;
@@ -1654,16 +1668,18 @@ textarea:focus {
    Responsive Breakpoints: Mobile Status Bar vs Desktop Sidebar
    ============================================================ */
 @media (max-width: 960px) {
-	.workspace-grid {
+	.workspace-grid,
+	.workspace-grid.has-sidebar {
 		grid-template-columns: minmax(0, 1fr);
 	}
 
 	.info-sidebar {
-		display: none;
-	}
-
-	.status-bar {
-		display: flex;
+		background-color: var(--bg-app);
+		border-radius: var(--radius-panel);
+		inset: 0;
+		padding-right: 0;
+		position: absolute;
+		z-index: 20;
 	}
 }
 

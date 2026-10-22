@@ -160,6 +160,9 @@ function App() {
   const [showHelp, setShowHelp] = useState(false)
   const [helpSearch, setHelpSearch] = useState('')
   const [selectedCategory, setSelectedCategory] = useState('Basic')
+  const [showSidebar, setShowSidebar] = useState(
+    () => localStorage.getItem('showSidebar') === 'true'
+  )
   const [metricsCollapsed, setMetricsCollapsed] = useState(false)
   const [scopeCollapsed, setScopeCollapsed] = useState(false)
   const [recomputeVersion, setRecomputeVersion] = useState(0)
@@ -365,6 +368,10 @@ function App() {
       textareaRef.current.scrollTop = 0
     }
   }, [content])
+
+  useEffect(() => {
+    localStorage.setItem('showSidebar', String(showSidebar))
+  }, [showSidebar])
 
   // Keep active line within the scrolling area when navigating or adding lines
   useEffect(() => {
@@ -667,6 +674,36 @@ function App() {
 
           <button
             type="button"
+            className={`toolbar-btn ${showSidebar ? 'is-active' : ''}`}
+            onClick={() => setShowSidebar((prev) => !prev)}
+            aria-label={showSidebar ? 'Switch to status bar' : 'Switch to visual sidebar'}
+            aria-pressed={showSidebar}
+            title={showSidebar ? 'Show status bar' : 'Show visual sidebar'}
+          >
+            {showSidebar ? (
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                <path d="M3.75 3v11.25A2.25 2.25 0 0 0 6 16.5h2.25M3.75 3h-1.5m1.5 0h16.5m0 0h1.5m-1.5 0v11.25A2.25 2.25 0 0 1 18 16.5h-2.25m-7.5 0h7.5m-7.5 0-1 3m8.5-3 1 3m0 0 .5 1.5m-.5-1.5h-9.5m0 0-.5 1.5M9 11.25v1.5M12 9v3.75m3-6v6" />
+              </svg>
+            ) : (
+              <svg
+                width="16"
+                height="16"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                aria-hidden="true"
+                style={{ transform: 'rotate(180deg)' }}
+              >
+                <path d="M3.75 12h16.5m-16.5 3.75h16.5M3.75 19.5h16.5M5.625 4.5h12.75a1.875 1.875 0 0 1 0 3.75H5.625a1.875 1.875 0 0 1 0-3.75Z" />
+              </svg>
+            )}
+          </button>
+
+          <button
+            type="button"
             className="help-trigger"
             onClick={() =>
               setShowHelp((prev) => {
@@ -684,7 +721,7 @@ function App() {
         </div>
       </header>
 
-      <div className="workspace-grid">
+      <div className={`workspace-grid ${showSidebar ? 'has-sidebar' : ''}`}>
         <section className="sheet-card" aria-label="Calculator workspace">
           <div className="pane-headers" aria-hidden="true">
             <div className="pane-header-left">
@@ -813,6 +850,7 @@ function App() {
           </main>
         </section>
 
+        {showSidebar && (
         <aside className="info-sidebar" aria-label="Sheet telemetry and scope">
           {/* Card 1: Aggregations (Sum & Avg) + Concentric Rings & Dot Range Strip */}
           <div className="bento-card bento-metrics">
@@ -1181,9 +1219,11 @@ function App() {
             )}
           </div>
         </aside>
+        )}
       </div>
 
-      {/* Mobile-only Status Bar */}
+      {/* Bottom Status Bar */}
+      {!showSidebar && (
       <footer className="status-bar">
         <div className="status-vars">
           {scopeItems.length === 0 ? (
@@ -1234,6 +1274,7 @@ function App() {
           )}
         </div>
       </footer>
+      )}
 
       {showHelp && (
         <div className="modal-backdrop" onClick={() => setShowHelp(false)}>
