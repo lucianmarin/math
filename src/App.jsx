@@ -162,6 +162,7 @@ function App() {
   const [selectedCategory, setSelectedCategory] = useState('Basic')
   const [metricsCollapsed, setMetricsCollapsed] = useState(false)
   const [scopeCollapsed, setScopeCollapsed] = useState(false)
+  const [recomputeVersion, setRecomputeVersion] = useState(0)
 
   const textareaRef = useRef(null)
   const containerRef = useRef(null)
@@ -197,6 +198,7 @@ function App() {
 
   // Evaluate lines and extract scope variables + summary stats
   const { results, lineItems, scopeItems, stats } = useMemo(() => {
+    void recomputeVersion
     const calc = parser()
     const splitLines = content.split(/\r?\n/)
     const items = []
@@ -341,7 +343,7 @@ function App() {
         max: hasNumeric ? format(maxVal, { precision: 10 }) : null,
       },
     }
-  }, [content])
+  }, [content, recomputeVersion])
 
   const lines = content.split(/\r?\n/)
   const highlightedLine = hoveredLine !== null ? hoveredLine : activeLine
@@ -584,20 +586,33 @@ function App() {
     <div className="app-shell">
       <header className="app-header">
         <div className="brand">
-          <div className="brand-icon" aria-hidden="true">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
-              <path
-                d="M 20.28 10.09 A 8.5 8.5 0 1 1 13.91 3.72"
-                stroke="currentColor"
-                strokeWidth="2.5"
-                strokeLinecap="round"
-              />
-              <circle cx="18.01" cy="5.99" r="2.5" fill="var(--accent)" />
-              <circle cx="12" cy="12" r="2.2" fill="currentColor" />
-            </svg>
-          </div>
+          <button
+            type="button"
+            className="brand-trigger"
+            onClick={() => setRecomputeVersion((v) => v + 1)}
+            title="Recompute all expressions"
+          >
+            <span className="brand-icon" aria-hidden="true">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+                <path
+                  d="M 20.28 10.09 A 8.5 8.5 0 1 1 13.91 3.72"
+                  stroke="currentColor"
+                  strokeWidth="2.5"
+                  strokeLinecap="round"
+                />
+                <circle cx="18.01" cy="5.99" r="2.5" fill="var(--accent)" />
+                <circle cx="12" cy="12" r="2.2" fill="currentColor" />
+              </svg>
+            </span>
+            <span className="brand-title">
+              <span className="brand-title-prefix">
+                <span className="brand-title-first">M</span>
+                <span className="brand-title-rest">ath</span>
+              </span>
+              ematical
+            </span>
+          </button>
           <div className="brand-text">
-            <span className="brand-title">Mathematical</span>
             <span className="brand-divider" aria-hidden="true">—</span>
             <span className="brand-count">{stats.expressionLines}</span>
           </div>

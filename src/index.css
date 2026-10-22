@@ -154,7 +154,23 @@ button {
 .brand {
 	align-items: center;
 	display: flex;
+	gap: 6px;
+}
+
+.brand-trigger {
+	align-items: center;
+	background: transparent;
+	border: none;
+	color: inherit;
+	cursor: pointer;
+	display: flex;
 	gap: 11px;
+	padding: 0;
+	text-align: left;
+}
+
+.brand-icon:hover {
+	background-color: var(--bg-btn-silver);
 }
 
 .brand-icon {
@@ -165,11 +181,12 @@ button {
 	display: flex;
 	height: 34px;
 	justify-content: center;
+	transition: background-color 0.15s ease;
 	width: 34px;
 }
 
 .brand-text {
-	align-items: center;
+	align-items: baseline;
 	display: flex;
 	gap: 6px;
 }
@@ -179,6 +196,32 @@ button {
 	font-size: 16px;
 	font-weight: 700;
 	letter-spacing: -0.02em;
+}
+
+.brand-title-prefix {
+	display: inline;
+}
+
+.brand-title-first {
+	border-bottom: 2px solid var(--accent);
+}
+
+.brand-title-rest {
+	position: relative;
+}
+
+.brand-title-rest::after {
+	border-bottom: 2px solid var(--accent);
+	bottom: -2px;
+	content: "";
+	left: 0;
+	position: absolute;
+	transition: width 0.2s ease;
+	width: 0;
+}
+
+.brand-title:hover .brand-title-rest::after {
+	width: 100%;
 }
 
 .brand-divider {
