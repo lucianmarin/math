@@ -185,12 +185,6 @@ button {
 	width: 34px;
 }
 
-.brand-text {
-	align-items: baseline;
-	display: flex;
-	gap: 6px;
-}
-
 .brand-title {
 	font-family: var(--font-sans);
 	font-size: 16px;
@@ -222,20 +216,6 @@ button {
 
 .brand-title:hover .brand-title-rest::after {
 	width: 100%;
-}
-
-.brand-divider {
-	color: var(--text-muted);
-	font-family: var(--font-sans);
-	font-size: 16px;
-}
-
-.brand-count {
-	color: var(--accent);
-	font-family: var(--font-sans);
-	font-size: 16px;
-	font-weight: 700;
-	letter-spacing: -0.02em;
 }
 
 .toolbar {

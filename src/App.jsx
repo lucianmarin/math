@@ -619,10 +619,6 @@ function App() {
               ematical
             </span>
           </button>
-          <div className="brand-text">
-            <span className="brand-divider" aria-hidden="true">—</span>
-            <span className="brand-count">{stats.expressionLines}</span>
-          </div>
         </div>
 
         <div className="toolbar">
