@@ -1349,7 +1349,7 @@ textarea:focus {
 	display: flex;
 	inset: 0;
 	justify-content: flex-end;
-	padding: 12px;
+	padding: 12px 14px;
 	position: fixed;
 	z-index: 50;
 }
@@ -1362,7 +1362,7 @@ textarea:focus {
 	font-family: var(--font-sans);
 	height: 100%;
 	line-height: 1.4;
-	max-width: 94vw;
+	max-width: 100%;
 	overflow: hidden;
 	width: 540px;
 }
@@ -1627,6 +1627,10 @@ textarea:focus {
 @media (max-width: 640px) {
 	.app-shell {
 		gap: 8px;
+		padding: 8px;
+	}
+
+	.modal-backdrop {
 		padding: 8px;
 	}
 
