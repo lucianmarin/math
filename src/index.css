@@ -3,6 +3,8 @@
 	--font-sans: -apple-system, BlinkMacSystemFont, "Inter", "SF Pro Display", "Segoe UI", Roboto, sans-serif;
 	--regular: 14px;
 	--line-height: 32px;
+	--radius-panel: 16px;
+	--radius-item: 12px;
 
 	/* Warm Stone / Braun / Nothing OS Palette (Light Mode) */
 	--bg-app: #e8e6df;
@@ -141,7 +143,7 @@ button {
 .app-header {
 	align-items: center;
 	background-color: var(--bg-surface);
-	border-radius: 18px;
+	border-radius: var(--radius-panel);
 	display: flex;
 	flex-shrink: 0;
 	height: 54px;
@@ -158,7 +160,7 @@ button {
 .brand-icon {
 	align-items: center;
 	background: var(--bg-surface-alt);
-	border-radius: 11px;
+	border-radius: var(--radius-item);
 	color: var(--text-primary);
 	display: flex;
 	height: 34px;
@@ -247,13 +249,13 @@ button {
 }
 
 .toolbar > button:first-child {
-	border-bottom-left-radius: 11px;
-	border-top-left-radius: 11px;
+	border-bottom-left-radius: var(--radius-item);
+	border-top-left-radius: var(--radius-item);
 }
 
 .toolbar > button:last-child {
-	border-bottom-right-radius: 11px;
-	border-top-right-radius: 11px;
+	border-bottom-right-radius: var(--radius-item);
+	border-top-right-radius: var(--radius-item);
 }
 
 .help-trigger:hover {
@@ -272,7 +274,7 @@ button {
 
 .sheet-card {
 	background-color: var(--bg-surface);
-	border-radius: 22px;
+	border-radius: var(--radius-panel);
 	display: flex;
 	flex-direction: column;
 	min-height: 0;
@@ -639,7 +641,7 @@ textarea:focus {
 
 .bento-card {
 	background-color: var(--bg-surface);
-	border-radius: 22px;
+	border-radius: var(--radius-panel);
 	display: flex;
 	flex-direction: column;
 	flex-shrink: 0;
@@ -688,7 +690,7 @@ textarea:focus {
 
 .orange-hero-card {
 	background-color: var(--accent);
-	border-radius: 18px;
+	border-radius: var(--radius-panel);
 	color: #ffffff;
 	display: flex;
 	flex-direction: column;
@@ -775,7 +777,7 @@ textarea:focus {
 .rings-widget {
 	align-items: center;
 	background-color: var(--bg-surface-alt);
-	border-radius: 18px;
+	border-radius: var(--radius-panel);
 	display: flex;
 	flex-direction: column;
 	justify-content: space-between;
@@ -824,7 +826,7 @@ textarea:focus {
 /* Dark Curve & Lollipop Sparkline + Biomarker Range Dots (banking.jpeg + dashboard.jpeg + blood.jpeg) */
 .dark-curve-card {
 	background-color: var(--bg-dark-card);
-	border-radius: 18px;
+	border-radius: var(--radius-panel);
 	color: #f4f3ef;
 	display: flex;
 	flex-direction: column;
@@ -1115,7 +1117,7 @@ textarea:focus {
 .scope-empty-box {
 	align-items: center;
 	background-color: var(--bg-surface-alt);
-	border-radius: 14px;
+	border-radius: var(--radius-item);
 	color: var(--text-muted);
 	display: flex;
 	flex-direction: column;
@@ -1159,7 +1161,7 @@ textarea:focus {
 .scope-bar-card {
 	background-color: var(--bg-surface-alt);
 	border: none;
-	border-radius: 13px;
+	border-radius: var(--radius-item);
 	color: var(--text-primary);
 	cursor: pointer;
 	overflow: hidden;
@@ -1176,7 +1178,7 @@ textarea:focus {
 
 .scope-bar-fill {
 	background-color: var(--accent-soft);
-	border-radius: 13px;
+	border-radius: var(--radius-item);
 	inset: 0 auto 0 0;
 	pointer-events: none;
 	position: absolute;
@@ -1246,7 +1248,7 @@ textarea:focus {
 .status-bar {
 	align-items: center;
 	background-color: var(--bg-surface);
-	border-radius: 16px;
+	border-radius: var(--radius-panel);
 	display: none;
 	flex-shrink: 0;
 	font-family: var(--font-sans);
@@ -1354,7 +1356,7 @@ textarea:focus {
 
 .help-drawer {
 	background-color: var(--bg-surface);
-	border-radius: 24px;
+	border-radius: var(--radius-panel);
 	display: flex;
 	flex-direction: column;
 	font-family: var(--font-sans);
@@ -1515,7 +1517,7 @@ textarea:focus {
 .help-card {
 	background-color: var(--bg-card);
 	border: none;
-	border-radius: 14px;
+	border-radius: var(--radius-item);
 	cursor: pointer;
 	display: flex;
 	flex-direction: column;
