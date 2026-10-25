@@ -1,5 +1,7 @@
 # Mathematical
 
+![screenshot](screenshot.png)
+
 Mathematical is a minimalist, reactive notepad calculator. It allows users to type mathematical expressions and variables on the left side of the screen and see the evaluated results in real-time on the right side. It combines the freedom of a text editor with the power of a scientific calculator.
 
 ## Features
