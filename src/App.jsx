@@ -787,7 +787,7 @@ function App() {
                       onKeyUp={(e) => updateActiveLine(e.target)}
                       onSelect={(e) => updateActiveLine(e.target)}
                       wrap="off"
-                      placeholder="Solve for x — e.g. x = 25, x * 4, 50 km in miles"
+                      placeholder="Solve for x"
                     />
                   </form>
                 </div>
