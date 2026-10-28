@@ -254,15 +254,6 @@ button {
 	color: var(--accent);
 }
 
-.toolbar-btn.is-active {
-	background-color: var(--accent);
-	color: #ffffff;
-}
-
-.toolbar-btn.is-active:hover:not(:disabled) {
-	background-color: var(--accent-hover);
-}
-
 .help-trigger {
 	align-items: center;
 	background-color: var(--accent);
@@ -299,14 +290,9 @@ button {
 	display: grid;
 	flex: 1;
 	gap: 12px;
-	grid-template-columns: minmax(0, 1fr);
+	grid-template-columns: minmax(0, 1fr) 25%;
 	grid-template-rows: minmax(0, 1fr);
 	min-height: 0;
-	position: relative;
-}
-
-.workspace-grid.has-sidebar {
-	grid-template-columns: minmax(0, 1fr) 33.333%;
 }
 
 .sheet-card {
@@ -722,7 +708,7 @@ textarea:focus {
 .metrics-split {
 	display: grid;
 	gap: 10px;
-	grid-template-columns: minmax(0, 1.15fr) minmax(0, 0.85fr);
+	grid-template-columns: repeat(2, minmax(0, 1fr));
 }
 
 .orange-hero-card {
@@ -816,23 +802,25 @@ textarea:focus {
 	background-color: var(--bg-surface-alt);
 	border-radius: var(--radius-panel);
 	display: flex;
-	flex-direction: column;
 	justify-content: space-between;
-	padding: 10px 8px;
+	padding: 8px 10px;
 }
 
 .concentric-rings-svg {
 	height: 82px;
+	margin: 0 auto;
 	width: 82px;
 }
 
 .rings-legend {
+	align-items: center;
 	color: var(--text-secondary);
 	display: flex;
 	font-size: 9.5px;
 	font-weight: 600;
 	gap: 6px;
 	justify-content: center;
+	writing-mode: vertical-rl;
 }
 
 .rings-legend span {
@@ -1280,13 +1268,13 @@ textarea:focus {
 }
 
 /* ============================================================
-   Bottom Status Bar
+   Mobile-Only Bottom Status Bar (Hidden on Large Displays)
    ============================================================ */
 .status-bar {
 	align-items: center;
 	background-color: var(--bg-surface);
 	border-radius: var(--radius-panel);
-	display: flex;
+	display: none;
 	flex-shrink: 0;
 	font-family: var(--font-sans);
 	font-size: 12px;
@@ -1648,18 +1636,16 @@ textarea:focus {
    Responsive Breakpoints: Mobile Status Bar vs Desktop Sidebar
    ============================================================ */
 @media (max-width: 960px) {
-	.workspace-grid,
-	.workspace-grid.has-sidebar {
+	.workspace-grid {
 		grid-template-columns: minmax(0, 1fr);
 	}
 
 	.info-sidebar {
-		background-color: var(--bg-app);
-		border-radius: var(--radius-panel);
-		inset: 0;
-		padding-right: 0;
-		position: absolute;
-		z-index: 20;
+		display: none;
+	}
+
+	.status-bar {
+		display: flex;
 	}
 }
 
