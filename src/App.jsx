@@ -605,11 +605,7 @@ function App() {
               </svg>
             </span>
             <span className="brand-title">
-              <span className="brand-title-prefix">
-                <span className="brand-title-first">M</span>
-                <span className="brand-title-rest">ath</span>
-              </span>
-              ematical
+              <span className="brand-title-prefix">Math</span>ematical
             </span>
           </button>
         </div>

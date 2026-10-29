@@ -194,29 +194,7 @@ button {
 }
 
 .brand-title-prefix {
-	display: inline;
-}
-
-.brand-title-first {
 	border-bottom: 2px solid var(--accent);
-}
-
-.brand-title-rest {
-	position: relative;
-}
-
-.brand-title-rest::after {
-	border-bottom: 2px solid var(--accent);
-	bottom: -2px;
-	content: "";
-	left: 0;
-	position: absolute;
-	transition: width 0.2s ease;
-	width: 0;
-}
-
-.brand-title:hover .brand-title-rest::after {
-	width: 100%;
 }
 
 .toolbar {
