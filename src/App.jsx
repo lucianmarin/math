@@ -1261,7 +1261,6 @@ function App() {
                   value={helpSearch}
                   onChange={(e) => setHelpSearch(e.target.value)}
                   placeholder="Search functions, operators, constants, or units (e.g. sin, det, planck, hectare)..."
-                  autoFocus
                 />
               </div>
 
