@@ -592,18 +592,6 @@ function App() {
             onClick={() => setRecomputeVersion((v) => v + 1)}
             title="Recompute all expressions"
           >
-            <span className="brand-icon" aria-hidden="true">
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
-                <path
-                  d="M 20.28 10.09 A 8.5 8.5 0 1 1 13.91 3.72"
-                  stroke="currentColor"
-                  strokeWidth="2.5"
-                  strokeLinecap="round"
-                />
-                <circle cx="18.01" cy="5.99" r="2.5" fill="var(--accent)" />
-                <circle cx="12" cy="12" r="2.2" fill="currentColor" />
-              </svg>
-            </span>
             <span className="brand-title">
               <span className="brand-title-prefix">Math</span>ematical
             </span>

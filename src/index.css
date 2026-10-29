@@ -149,13 +149,12 @@ button {
 	flex-shrink: 0;
 	height: 54px;
 	justify-content: space-between;
-	padding: 0 16px;
+	padding: 0 16px 0 60px;
 }
 
 .brand {
 	align-items: center;
 	display: flex;
-	gap: 6px;
 }
 
 .brand-trigger {
@@ -165,25 +164,9 @@ button {
 	color: inherit;
 	cursor: pointer;
 	display: flex;
-	gap: 11px;
+	height: 34px;
 	padding: 0;
 	text-align: left;
-}
-
-.brand-icon:hover {
-	background-color: var(--bg-btn-silver);
-}
-
-.brand-icon {
-	align-items: center;
-	background: var(--bg-surface-alt);
-	border-radius: var(--radius-item);
-	color: var(--text-primary);
-	display: flex;
-	height: 34px;
-	justify-content: center;
-	transition: background-color 0.15s ease;
-	width: 34px;
 }
 
 .brand-title {
@@ -305,7 +288,7 @@ button {
 }
 
 .pane-header-left {
-	gap: 10px;
+	gap: 12px;
 	padding-right: 16px;
 }
 
@@ -1641,6 +1624,10 @@ textarea:focus {
 }
 
 @media (max-width: 640px) {
+	.app-header {
+		padding-left: 46px;
+	}
+
 	.toolbar-btn span {
 		display: none;
 	}
